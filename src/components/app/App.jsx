@@ -12,21 +12,9 @@ class App extends React.Component {
     bad: 0,
   };
 
-  goodFeedbackIncrement = () => {
+  incrementOption = feedback => {
     this.setState(prevState => ({
-      good: prevState.good + 1,
-    }));
-  };
-
-  neutralFeedbackIncrement = () => {
-    this.setState(prevState => ({
-      neutral: prevState.neutral + 1,
-    }));
-  };
-
-  badFeedbackIncrement = () => {
-    this.setState(prevState => ({
-      bad: prevState.bad + 1,
+      [feedback]: prevState[feedback] + 1,
     }));
   };
 
@@ -44,26 +32,24 @@ class App extends React.Component {
   }
 
   render() {
-    const onBtn = [
-      this.goodFeedbackIncrement,
-      this.neutralFeedbackIncrement,
-      this.badFeedbackIncrement,
-    ];
+    const { good, neutral, bad } = this.state;
+    const options = Object.keys(this.state);
+
     return (
       <>
         <Section title="Please leave feedback">
           <FeedbackOptions
-            options={Object.keys(this.state)}
-            onLeaveFeedback={onBtn}
+            options={options}
+            onLeaveFeedback={this.incrementOption}
           />
         </Section>
 
         {this.countTotalFeedback() !== 0 ? (
           <Section title="Statistic">
             <Statistic
-              good={this.state.good}
-              neutral={this.state.neutral}
-              bad={this.state.bad}
+              good={good}
+              neutral={neutral}
+              bad={bad}
               total={this.countTotalFeedback()}
               positivePercentage={this.countPositiveFeedbackPercentage()}
             />
